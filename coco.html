@@ -17,14 +17,18 @@
     .btn-green { background: #4ecca3; color: #1a1a2e; }
     .btn-red { background: #e94560; color: white; }
     .btn-grey { background: #333; color: white; }
+    .btn-small { padding: 8px 14px; font-size: 0.85rem; width: auto; margin: 0; }
     .section { width: 100%; max-width: 440px; }
     .hidden { display: none !important; }
-    .card-question { background: #0f3460; border: 2px solid #4ecca3; border-radius: 14px; padding: 24px; text-align: center; font-size: 1.2rem; line-height: 1.6; margin-bottom: 20px; }
-    .blank { display: inline-block; border-bottom: 3px solid #4ecca3; min-width: 80px; }
+    .card-question { background: #0f3460; border: 2px solid #4ecca3; border-radius: 14px; padding: 24px; text-align: center; font-size: 1.2rem; line-height: 1.8; margin-bottom: 20px; }
     .hand { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-    .card-answer { background: #16213e; border: 1px solid #444; border-radius: 10px; padding: 14px; cursor: pointer; transition: 0.2s; font-size: 0.95rem; user-select: none; }
+    .card-answer { background: #16213e; border: 1px solid #444; border-radius: 10px; padding: 14px; cursor: pointer; transition: 0.2s; font-size: 0.95rem; user-select: none; position: relative; }
     .card-answer:hover { border-color: #e2b96f; }
     .card-answer.selected { border-color: #4ecca3; background: #0f3460; }
+    .card-answer.selected-2 { border-color: #a78bfa; background: #1a0f3460; }
+    .card-order-badge { position: absolute; top: 6px; right: 8px; width: 22px; height: 22px; border-radius: 50%; font-size: 0.75rem; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+    .badge-1 { background: #4ecca3; color: #1a1a2e; }
+    .badge-2 { background: #a78bfa; color: white; }
     .status-msg { text-align: center; color: #aaa; font-size: 0.95rem; margin-bottom: 16px; min-height: 24px; }
     .room-code { background: #16213e; border-radius: 10px; padding: 16px; text-align: center; margin-bottom: 16px; }
     .room-code span { font-size: 2rem; font-weight: bold; color: #e2b96f; letter-spacing: 6px; }
@@ -32,7 +36,6 @@
     .badge { font-size: 0.75rem; padding: 3px 10px; border-radius: 20px; font-weight: bold; }
     .badge-gold { background: #e2b96f; color: #1a1a2e; }
     .badge-grey { background: #333; color: #aaa; }
-    .badge-green { background: #4ecca3; color: #1a1a2e; }
     .deck-row { background: #16213e; border: 1px solid #333; border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
     .deck-row .deck-title { font-weight: bold; margin-bottom: 4px; font-size: 0.95rem; }
     .deck-row .deck-desc { font-size: 0.8rem; color: #aaa; margin-bottom: 10px; }
@@ -49,37 +52,27 @@
     .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: .3s; }
     input:checked + .slider { background: #4ecca3; }
     input:checked + .slider:before { transform: translateX(20px); }
-
-    /* Attente : joueurs restants */
     .waiting-players { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; justify-content: center; }
     .waiting-chip { padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; background: #16213e; border: 1px solid #444; color: #aaa; }
     .waiting-chip.done { border-color: #4ecca3; color: #4ecca3; }
-
-    /* Défilement des cartes */
-    .reveal-stage { text-align: center; }
-    .big-card { background: #16213e; border: 2px solid #e2b96f; border-radius: 16px; padding: 30px 20px; font-size: 1.3rem; margin: 0 auto 20px; max-width: 340px; min-height: 120px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; }
+    .big-card { background: #16213e; border: 2px solid #e2b96f; border-radius: 16px; padding: 30px 20px; font-size: 1.3rem; margin: 0 auto 20px; max-width: 340px; min-height: 120px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; text-align: center; }
     .big-card:hover { transform: scale(1.02); }
-    .card-counter { color: #aaa; font-size: 0.85rem; margin-bottom: 12px; }
-
-    /* Classement drag */
+    .card-counter { color: #aaa; font-size: 0.85rem; margin-bottom: 12px; text-align: center; }
     .ranking-area { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px; min-height: 80px; padding: 10px; border: 1px dashed #333; border-radius: 12px; }
     .rank-card { background: #16213e; border: 2px solid #444; border-radius: 10px; padding: 12px; width: 140px; cursor: grab; font-size: 0.9rem; text-align: center; transition: border-color 0.2s; position: relative; }
     .rank-card.liked { border-color: #e2b96f; background: #1a1a0e; }
     .rank-card .author { font-size: 0.7rem; color: #4ecca3; margin-top: 6px; }
     .rank-card:active { cursor: grabbing; }
-
-    /* Overlay ajout carte */
     .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10,10,30,0.85); backdrop-filter: blur(4px); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
     .overlay-box { background: #16213e; border-radius: 16px; padding: 24px; width: 100%; max-width: 380px; border: 1px solid #333; }
     .overlay-box h2 { color: #e2b96f; margin-bottom: 16px; font-size: 1.1rem; }
-
-    /* Boutons flottants decks dynamiques */
     .floating-btns { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 8px; z-index: 50; }
     .float-btn { width: 44px; height: 44px; border-radius: 50%; border: none; font-size: 1.3rem; cursor: pointer; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; }
-
-    /* Phase écriture */
-    .writing-card-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; max-height: 200px; overflow-y: auto; }
-    .writing-card-item { background: #0f3460; border-radius: 8px; padding: 8px 12px; font-size: 0.85rem; color: #ccc; }
+    .quit-btn { position: fixed; top: 16px; right: 16px; background: rgba(233,69,96,0.15); border: 1px solid #e94560; color: #e94560; border-radius: 8px; padding: 6px 12px; font-size: 0.8rem; cursor: pointer; z-index: 60; width: auto; margin: 0; font-weight: bold; }
+    .quit-btn:hover { background: rgba(233,69,96,0.3); }
+    .tippex { background: white; color: #1a1a2e; font-weight: bold; border-radius: 4px; padding: 1px 7px; font-size: 0.95em; box-shadow: 0 1px 4px rgba(0,0,0,0.3); display: inline-block; margin: 0 2px; white-space: nowrap; }
+    .blank-slot { display: inline-block; border-bottom: 3px solid #4ecca3; min-width: 70px; margin: 0 4px; vertical-align: bottom; }
+    .blank-slot-numbered { display: inline-block; border-bottom: 3px solid #a78bfa; min-width: 50px; margin: 0 3px; vertical-align: bottom; font-size: 0.7em; color: #a78bfa; padding: 0 4px; }
   </style>
 </head>
 <body>
@@ -131,8 +124,8 @@
   <h1>🃏 Nouveau deck</h1>
   <input type="text" id="input-deck-name" placeholder="Nom du deck..." maxlength="30"/>
   <input type="text" id="input-deck-desc" placeholder="Description courte..." maxlength="60"/>
-  <input type="text" id="input-deck-color" placeholder="Couleur (#hex ou nom css)" value="#a78bfa"/>
-  <div style="height:20px;border-radius:8px;margin-bottom:12px;transition:background 0.2s;" id="color-preview"></div>
+  <input type="text" id="input-deck-color" placeholder="Couleur (#hex)" value="#a78bfa"/>
+  <div style="height:20px;border-radius:8px;margin-bottom:12px;" id="color-preview"></div>
   <button class="btn-green" id="btn-save-new-deck">Créer ce deck</button>
 </div>
 
@@ -148,6 +141,7 @@
   <div id="lobby-players"></div>
   <div class="status-msg">Partage le code avec tes amis !</div>
   <button class="btn-green hidden" id="btn-start-game">🚀 Lancer la partie</button>
+  <button class="btn-red" id="btn-quit-lobby">Quitter la salle</button>
 </div>
 
 <!-- ÉCRAN PHASE ÉCRITURE -->
@@ -155,9 +149,9 @@
   <h1>✍️ Phase d'écriture</h1>
   <p style="color:#aaa;font-size:0.85rem;text-align:center;margin-bottom:16px;">Ajoutez des cartes aux decks dynamiques avant de jouer</p>
   <div id="writing-deck-btns" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;"></div>
-  <div id="writing-added" class="writing-card-list"></div>
   <div class="status-msg" id="writing-status"></div>
   <button class="btn-green hidden" id="btn-end-writing">▶ Lancer la partie</button>
+  <button class="btn-red" id="btn-quit-writing">Quitter</button>
 </div>
 
 <!-- ÉCRAN JEU -->
@@ -174,7 +168,7 @@
   <button class="btn-primary" onclick="clearSessionAndGoHome()">← Retour à l'accueil</button>
 </div>
 
-<!-- OVERLAY AJOUT CARTE EN JEU -->
+<!-- OVERLAY AJOUT CARTE -->
 <div class="overlay hidden" id="overlay-add-card">
   <div class="overlay-box">
     <h2 id="overlay-deck-title">Ajouter une carte</h2>
@@ -183,19 +177,29 @@
       <button class="btn-grey" id="overlay-btn-answer" style="flex:1;padding:10px;" onclick="setCardType('answer')">💬 Réponse</button>
     </div>
     <div id="overlay-hint" style="font-size:0.8rem;color:#aaa;margin-bottom:8px;min-height:16px;"></div>
-    <input type="text" id="overlay-card-text" placeholder="Écris ta carte..." maxlength="120"/>
+    <input type="text" id="overlay-card-text" placeholder="Écris ta carte..." maxlength="160"/>
     <button class="btn-green" onclick="submitNewCard()">Ajouter ✓</button>
     <button class="btn-grey" onclick="closeOverlay()">Annuler</button>
   </div>
 </div>
 
+<!-- OVERLAY QUITTER -->
+<div class="overlay hidden" id="overlay-quit">
+  <div class="overlay-box">
+    <h2>Quitter la partie ?</h2>
+    <p style="color:#aaa;font-size:0.9rem;margin-bottom:20px;">Tu seras retiré de la partie. Si tu es le seul joueur restant, la partie se fermera.</p>
+    <button class="btn-red" onclick="confirmQuit()">Oui, quitter</button>
+    <button class="btn-grey" onclick="closeQuitOverlay()">Annuler</button>
+  </div>
+</div>
+
+<!-- BOUTON QUITTER EN JEU -->
+<button class="quit-btn hidden" id="quit-ingame-btn" onclick="openQuitOverlay()">✕ Quitter</button>
+
 <!-- BOUTONS FLOTTANTS -->
 <div class="floating-btns" id="floating-btns"></div>
 
 <script>
-// ═══════════════════════════════════════════════
-// FIREBASE
-// ═══════════════════════════════════════════════
 const firebaseConfig = {
   apiKey: "AIzaSyDlXhhS8Az04Z-55LHtJWqrVJt79LhSIAU",
   authDomain: "plateforme-77efd.firebaseapp.com",
@@ -207,14 +211,12 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// ═══════════════════════════════════════════════
-// DECKS STATIQUES
-// ═══════════════════════════════════════════════
+// ═══ DECKS STATIQUES ════════════════════════════
 const STATIC_DECKS = {
   trash: {
-    name: "🗑️ Trash", color: "#e94560",
-    description: "Humour noir, gras et sans filtre",
-    questions: [
+    name:"🗑️ Trash", color:"#e94560",
+    description:"Humour noir, gras et sans filtre",
+    questions:[
       "Ce soir, on mange ___.", "J'ai trouvé ___ dans le frigo.",
       "Le médecin a dit que j'avais besoin de ___.",
       "Mon pire souvenir d'école : ___.", "À mon enterrement, je veux ___.",
@@ -225,13 +227,13 @@ const STATIC_DECKS = {
       "Ce que je ferais avec un million d'euros : ___.",
       "La phrase que je répète trop souvent : ___.",
       "___ m'a complètement changé la vie.", "Mon seul talent caché : ___.",
-      "La prochaine invention dont le monde a besoin : ___.",
       "Mon animal de compagnie idéal : ___.",
       "Ce que je ferais si j'avais 24h à vivre : ___.",
-      "Le truc dont personne ne parle mais tout le monde fait : ___.",
-      "Ma technique secrète pour séduire : ___."
+      "Ma technique secrète pour séduire : ___.",
+      "Entre ___ et ___, j'ai toujours préféré ___.",
+      "Ce matin, j'ai trouvé ___ dans mon ___ et j'ai compris que ___."
     ],
-    answers: [
+    answers:[
       "des nouilles froides","mon ex","une bouteille de ketchup vide",
       "pleurer sous la douche","faire semblant de téléphoner",
       "un cheval en colère","trois cafés d'affilée","regarder le plafond",
@@ -258,9 +260,9 @@ const STATIC_DECKS = {
     ]
   },
   absurde: {
-    name: "🌀 Absurde", color: "#4ecca3",
-    description: "Situations improbables et logique de travers",
-    questions: [
+    name:"🌀 Absurde", color:"#4ecca3",
+    description:"Situations improbables et logique de travers",
+    questions:[
       "Les scientifiques ont découvert que ___ cause le bonheur.",
       "Le nouveau sport olympique : ___.",
       "En 2087, les humains seront remplacés par ___.",
@@ -269,20 +271,20 @@ const STATIC_DECKS = {
       "Le superhéros dont le monde a besoin : ___.",
       "Ce que les extraterrestres pensent de la Terre : ___.",
       "L'invention qui a tout gâché : ___.",
-      "Le nouveau moyen de transport écologique : ___.",
       "La vraie raison pour laquelle les dinosaures ont disparu : ___.",
       "Ce que cache réellement la Joconde : ___.",
       "La solution au réchauffement climatique selon moi : ___.",
-      "Ce qu'on trouve au centre de la Terre : ___.",
       "Le secret de l'immortalité : ___.",
       "Ce que pensent vraiment les pigeons : ___.",
       "La vraie signification de la vie : ___.",
       "Mon plan pour dominer le monde : ___.",
       "Le thème de mon mariage : ___.",
-      "Le prochain livre best-seller : ___ pour les nuls.",
-      "Ce qui se passe vraiment quand on éteint la lumière : ___."
+      "Ce qui se passe vraiment quand on éteint la lumière : ___.",
+      "___ rencontre ___ : c'est la fin du monde.",
+      "Dans un monde où ___ est interdit, ___ devient la monnaie d'échange.",
+      "Le jour où ___ a décidé de ___, personne n'était prêt."
     ],
-    answers: [
+    answers:[
       "un canard en plastique sentient","manger de la colle en réunion",
       "une imprimante qui marche du premier coup","le wifi des voisins",
       "un chien qui parle mais dit que des bêtises","42 baguettes de pain",
@@ -297,7 +299,7 @@ const STATIC_DECKS = {
       "une grenouille avec un MBA","du papier bulle infini",
       "un GPS qui insulte poliment","une machine à remonter le temps bloquée en 2007",
       "un sosie de Napoléon en rollers","une araignée chef cuisinier",
-      "le son d'un didgeridoo à l'aube","un contrat avec le diable pour du wifi 5G",
+      "un contrat avec le diable pour du wifi 5G",
       "une prophétie écrite sur un ticket de caisse","l'ombre d'un nuage pensif",
       "un hamster stratège","la magie de l'imprimante en panne",
       "une vache cosmonaute","le dernier biscuit dans la boîte",
@@ -309,68 +311,113 @@ const STATIC_DECKS = {
   }
 };
 
-// ═══════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════
+// ═══ STATE ══════════════════════════════════════
 let myName='', myId='', roomId='';
-let unsubscribe=null, myHand=[], selectedCard=null, gameState=null;
+let unsubscribe=null, myHand=[], gameState=null;
 let staticCoeffs={}, dynamicCoeffs={};
-let dynamicDecks={}; // { id: {name,color,description,questions,answers} }
+let dynamicDecks={};
 let currentOverlayDeckId=null, currentCardType='answer';
-let revealIndex=0, revealCards=[], revealAuthors=[];
 let dragSrc=null;
 let liveCardsEnabled=false;
 let activeDynamicDeckIds=[];
+// Multi-sélection de cartes (pour questions à plusieurs trous)
+let selectedCards=[]; // tableau ordonné d'indices
 
-// ═══════════════════════════════════════════════
-// UTILS
-// ═══════════════════════════════════════════════
+// ═══ UTILS ══════════════════════════════════════
 function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function genCode(){return Math.random().toString(36).substring(2,8).toUpperCase();}
 function genId(){return Math.random().toString(36).substring(2,12);}
 function showScreen(id){document.querySelectorAll('.section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
-function qHtml(q, answer) {
-  if (answer) {
-    // Réponse insérée avec effet Tipp-Ex
-    const answerSpan = `<span style="
-      background: white;
-      color: #1a1a2e;
-      font-weight: bold;
-      border-radius: 4px;
-      padding: 2px 8px;
-      font-size: 1rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-      display: inline-block;
-      margin: 0 2px;
-    ">${answer}</span>`;
-    return q.replace('___', answerSpan);
-  }
-  // Trou vide — tiret blanc souligné
-  return q.replace('___', '<span style="display:inline-block;border-bottom:3px solid #4ecca3;min-width:80px;margin:0 4px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>');
-}
-function normalizeMarker(text) {
-  // Remplace tout _ isolé ou groupe de _ par ___
-  return text.replace(/_+/g, '___');
+function normalizeMarker(text){return text.replace(/_+/g,'___');}
+function countBlanks(q){return (q.match(/___/g)||[]).length;}
+
+// Rendu de la question avec réponses ou trous vides
+function qHtml(q, answers){
+  // answers peut être undefined, une string (1 trou), ou un tableau
+  const parts = q.split('___');
+  const blanksCount = parts.length - 1;
+  if(!blanksCount) return q;
+  let ansArr = [];
+  if(Array.isArray(answers)) ansArr = answers;
+  else if(typeof answers === 'string') ansArr = [answers];
+
+  return parts.map((part, i) => {
+    if(i === blanksCount) return part;
+    const ans = ansArr[i];
+    const slot = ans
+      ? `<span class="tippex">${ans}</span>`
+      : (blanksCount > 1
+          ? `<span class="blank-slot-numbered">${i+1}</span>`
+          : `<span class="blank-slot">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>`);
+    return part + slot;
+  }).join('');
 }
 
-// ═══════════════════════════════════════════════
-// SESSION
-// ═══════════════════════════════════════════════
+// ═══ SESSION ════════════════════════════════════
 function saveSession(){localStorage.setItem('coco_session',JSON.stringify({myId,myName,roomId}));}
 function loadSession(){try{const s=localStorage.getItem('coco_session');return s?JSON.parse(s):null;}catch{return null;}}
 function clearSession(){localStorage.removeItem('coco_session');}
 window.clearSessionAndGoHome=()=>{clearSession();location.href='index.html';};
 
-// ═══════════════════════════════════════════════
-// ALGORITHME PROPORTIONS
-// ═══════════════════════════════════════════════
+// ═══ QUITTER ════════════════════════════════════
+function openQuitOverlay(){document.getElementById('overlay-quit').classList.remove('hidden');}
+window.openQuitOverlay=openQuitOverlay;
+window.closeQuitOverlay=()=>{document.getElementById('overlay-quit').classList.add('hidden');};
+
+window.confirmQuit=async()=>{
+  closeQuitOverlay();
+  await quitRoom();
+};
+
+async function quitRoom(){
+  if(!roomId||!myId) { clearSessionAndGoHome(); return; }
+  try {
+    const doc = await db.collection('rooms').doc(roomId).get();
+    if(!doc.exists){ clearSessionAndGoHome(); return; }
+    const data = doc.data();
+    const players = {...data.players};
+    delete players[myId];
+    const remaining = Object.keys(players).length;
+
+    if(remaining === 0){
+      // Ferme la partie
+      await db.collection('rooms').doc(roomId).update({status:'ended', finalWinner:null, players});
+    } else {
+      const updates = {players};
+      // Si c'était le czar, passe au prochain
+      if(data.czar === myId){
+        updates.czar = Object.keys(players)[0];
+      }
+      // Si c'était l'hôte, passe au prochain
+      if(data.host === myId){
+        updates.host = Object.keys(players)[0];
+      }
+      // Retire les soumissions du joueur qui part
+      if(data.submissions?.[myId]){
+        const subs = {...data.submissions};
+        delete subs[myId];
+        updates.submissions = subs;
+      }
+      await db.collection('rooms').doc(roomId).update(updates);
+    }
+  } catch(e){ console.error(e); }
+  if(unsubscribe) unsubscribe();
+  clearSession();
+  location.href='index.html';
+}
+
+// Boutons quitter dans lobby et writing
+document.getElementById('btn-quit-lobby').addEventListener('click', openQuitOverlay);
+document.getElementById('btn-quit-writing').addEventListener('click', openQuitOverlay);
+
+// ═══ ALGORITHME PROPORTIONS ═════════════════════
 function buildDeck(coeffMap, allDecks){
   const active=Object.entries(coeffMap).filter(([,v])=>v>0);
   if(!active.length) return {questions:[],answers:[]};
   let mfQ=Infinity, mfA=Infinity;
   for(const [k,c] of active){
-    mfQ=Math.min(mfQ,(allDecks[k].questions.length)/c);
-    mfA=Math.min(mfA,(allDecks[k].answers.length)/c);
+    mfQ=Math.min(mfQ,allDecks[k].questions.length/c);
+    mfA=Math.min(mfA,allDecks[k].answers.length/c);
   }
   const q=[], a=[];
   for(const [k,c] of active){
@@ -379,48 +426,37 @@ function buildDeck(coeffMap, allDecks){
   }
   return {questions:shuffle(q), answers:shuffle(a)};
 }
-
 function mergeCoeffs(){
-  const merged={};
-  for(const [k,v] of Object.entries(staticCoeffs)) if(v>0) merged[k]=v;
-  for(const [k,v] of Object.entries(dynamicCoeffs)) if(v>0) merged[k]=v;
-  return merged;
+  const m={};
+  for(const [k,v] of Object.entries(staticCoeffs)) if(v>0) m[k]=v;
+  for(const [k,v] of Object.entries(dynamicCoeffs)) if(v>0) m[k]=v;
+  return m;
 }
-
-function allDecksMap(){
-  return {...STATIC_DECKS, ...dynamicDecks};
-}
-
+function allDecksMap(){ return {...STATIC_DECKS,...dynamicDecks}; }
 function previewText(){
   const merged=mergeCoeffs();
   const active=Object.entries(merged).filter(([,v])=>v>0);
   if(!active.length) return "Sélectionne au moins un deck";
   const all=allDecksMap();
-  let mfQ=Infinity, mfA=Infinity;
-  for(const [k,c] of active){
-    if(!all[k]) continue;
-    mfQ=Math.min(mfQ,all[k].questions.length/c);
-    mfA=Math.min(mfA,all[k].answers.length/c);
-  }
+  let mfQ=Infinity,mfA=Infinity;
+  for(const [k,c] of active){if(!all[k])continue;mfQ=Math.min(mfQ,all[k].questions.length/c);mfA=Math.min(mfA,all[k].answers.length/c);}
   const tQ=active.reduce((s,[k,c])=>s+Math.floor(c*mfQ),0);
   const tA=active.reduce((s,[k,c])=>s+Math.floor(c*mfA),0);
   return `→ ${tQ} cartes questions · ${tA} cartes réponses`;
 }
 
-// ═══════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════
+// ═══ INIT ════════════════════════════════════════
 async function init(){
   const session=loadSession();
-  if(session?.roomId && session?.myId){
+  if(session?.roomId&&session?.myId){
     const doc=await db.collection('rooms').doc(session.roomId).get();
     if(doc.exists){
       const data=doc.data();
-      if(data.players?.[session.myId] && data.status!=='ended'){
-        myId=session.myId; myName=session.myName; roomId=session.roomId;
+      if(data.players?.[session.myId]&&data.status!=='ended'){
+        myId=session.myId;myName=session.myName;roomId=session.roomId;
         document.getElementById('display-room-code').textContent=roomId;
         await loadDynamicDecks();
-        listenRoom(); return;
+        listenRoom();return;
       }
     }
     clearSession();
@@ -429,50 +465,36 @@ async function init(){
   showScreen('screen-join');
 }
 
-// ═══════════════════════════════════════════════
-// CHARGER DECKS DYNAMIQUES DEPUIS FIREBASE
-// ═══════════════════════════════════════════════
 async function loadDynamicDecks(){
   const snap=await db.collection('dynamic_decks').get();
   dynamicDecks={};
-  snap.forEach(doc=>{ dynamicDecks[doc.id]={...doc.data(), id:doc.id}; });
+  snap.forEach(doc=>{dynamicDecks[doc.id]={...doc.data(),id:doc.id};});
 }
 
-// ═══════════════════════════════════════════════
-// RENDER DECK SELECTOR
-// ═══════════════════════════════════════════════
+// ═══ DECK SELECTORS ══════════════════════════════
 function renderDeckSelectors(){
-  // Statiques
-  Object.keys(STATIC_DECKS).forEach(k=>{ staticCoeffs[k]=0; });
+  Object.keys(STATIC_DECKS).forEach(k=>{staticCoeffs[k]=0;});
   const sc=document.getElementById('deck-selector-static');
   sc.innerHTML='';
-  Object.entries(STATIC_DECKS).forEach(([k,d])=>{
-    sc.appendChild(makeDeckRow(k,d,'static'));
-  });
-  // Dynamiques
-  Object.keys(dynamicDecks).forEach(k=>{ dynamicCoeffs[k]=0; });
+  Object.entries(STATIC_DECKS).forEach(([k,d])=>{sc.appendChild(makeDeckRow(k,d,'static'));});
+  Object.keys(dynamicDecks).forEach(k=>{dynamicCoeffs[k]=0;});
   renderDynamicDeckSelector();
 }
-
 function renderDynamicDeckSelector(){
   const dc=document.getElementById('deck-selector-dynamic');
   dc.innerHTML='';
   if(!Object.keys(dynamicDecks).length){
-    dc.innerHTML='<p style="color:#666;font-size:0.85rem;margin-bottom:8px;">Aucun deck dynamique pour l\'instant</p>';
-    return;
+    dc.innerHTML='<p style="color:#666;font-size:0.85rem;margin-bottom:8px;">Aucun deck dynamique pour l\'instant</p>';return;
   }
   Object.entries(dynamicDecks).forEach(([k,d])=>{
-    if(!dynamicCoeffs[k]) dynamicCoeffs[k]=0;
+    if(!dynamicCoeffs[k])dynamicCoeffs[k]=0;
     dc.appendChild(makeDeckRow(k,d,'dynamic'));
   });
 }
-
-function makeDeckRow(k, d, type){
+function makeDeckRow(k,d,type){
   const div=document.createElement('div');
-  div.className='deck-row';
-  div.style.borderColor=d.color||'#333';
-  const qLen=d.questions?.length||0;
-  const aLen=d.answers?.length||0;
+  div.className='deck-row';div.style.borderColor=d.color||'#333';
+  const qLen=d.questions?.length||0,aLen=d.answers?.length||0;
   div.innerHTML=`
     <div class="deck-title" style="color:${d.color||'#e2b96f'}">${d.name}</div>
     <div class="deck-desc">${d.description||''}</div>
@@ -484,37 +506,26 @@ function makeDeckRow(k, d, type){
     <div class="deck-info">${qLen} questions · ${aLen} réponses</div>`;
   return div;
 }
-
 window.changeCoeff=(k,type,delta)=>{
-  if(type==='static') staticCoeffs[k]=Math.max(0,(staticCoeffs[k]||0)+delta);
+  if(type==='static')staticCoeffs[k]=Math.max(0,(staticCoeffs[k]||0)+delta);
   else dynamicCoeffs[k]=Math.max(0,(dynamicCoeffs[k]||0)+delta);
-  document.getElementById(`coeff-${k}`).textContent=
-    type==='static'?staticCoeffs[k]:dynamicCoeffs[k];
+  document.getElementById(`coeff-${k}`).textContent=type==='static'?staticCoeffs[k]:dynamicCoeffs[k];
   document.getElementById('deck-preview').textContent=previewText();
 };
 
-// ═══════════════════════════════════════════════
-// NOUVEAU DECK DYNAMIQUE
-// ═══════════════════════════════════════════════
-document.getElementById('btn-new-deck').addEventListener('click',()=>{
-  showScreen('screen-new-deck');
-});
-document.getElementById('back-from-newdeck').addEventListener('click',()=>{
-  showScreen('screen-settings');
-});
+// ═══ NOUVEAU DECK ════════════════════════════════
+document.getElementById('btn-new-deck').addEventListener('click',()=>showScreen('screen-new-deck'));
+document.getElementById('back-from-newdeck').addEventListener('click',()=>showScreen('screen-settings'));
 document.getElementById('input-deck-color').addEventListener('input',e=>{
   document.getElementById('color-preview').style.background=e.target.value;
 });
 document.getElementById('color-preview').style.background='#a78bfa';
-
 document.getElementById('btn-save-new-deck').addEventListener('click',async()=>{
   const name=document.getElementById('input-deck-name').value.trim();
   const desc=document.getElementById('input-deck-desc').value.trim();
   const color=document.getElementById('input-deck-color').value.trim()||'#a78bfa';
-  if(!name) return alert("Donne un nom au deck !");
-  const ref=await db.collection('dynamic_decks').add({
-    name, description:desc, color, questions:[], answers:[], createdAt:new Date()
-  });
+  if(!name)return alert("Donne un nom au deck !");
+  const ref=await db.collection('dynamic_decks').add({name,description:desc,color,questions:[],answers:[],createdAt:new Date()});
   dynamicDecks[ref.id]={id:ref.id,name,description:desc,color,questions:[],answers:[]};
   dynamicCoeffs[ref.id]=0;
   showScreen('screen-settings');
@@ -522,62 +533,52 @@ document.getElementById('btn-save-new-deck').addEventListener('click',async()=>{
   document.getElementById('deck-preview').textContent=previewText();
 });
 
-// ═══════════════════════════════════════════════
-// CRÉER UNE PARTIE
-// ═══════════════════════════════════════════════
+// ═══ CRÉER PARTIE ════════════════════════════════
 document.getElementById('btn-create').addEventListener('click',()=>{
   myName=document.getElementById('input-player-name').value.trim();
-  if(!myName) return alert("Entre ton prénom !");
+  if(!myName)return alert("Entre ton prénom !");
   renderDeckSelectors();
   showScreen('screen-settings');
 });
-
 document.getElementById('btn-confirm-settings').addEventListener('click',async()=>{
   const merged=mergeCoeffs();
-  if(!Object.values(merged).some(v=>v>0)) return alert("Sélectionne au moins un deck !");
+  if(!Object.values(merged).some(v=>v>0))return alert("Sélectionne au moins un deck !");
   const all=allDecksMap();
   const {questions,answers}=buildDeck(merged,all);
-  if(questions.length<3) return alert("Pas assez de cartes questions !");
-  if(answers.length<14) return alert("Pas assez de cartes réponses !");
-
+  if(questions.length<3)return alert("Pas assez de cartes questions !");
+  if(answers.length<14)return alert("Pas assez de cartes réponses !");
   const points=parseInt(document.getElementById('select-points').value);
   const writingPhase=document.getElementById('toggle-writing').checked;
   const liveCards=document.getElementById('toggle-live-cards').checked;
   const activeDynIds=Object.entries(dynamicCoeffs).filter(([,v])=>v>0).map(([k])=>k);
-
-  roomId=genCode(); myId=genId();
+  roomId=genCode();myId=genId();
   const myCards=answers.splice(0,7);
-
   await db.collection('rooms').doc(roomId).set({
-    status: writingPhase?'writing':'lobby',
-    pointsToWin:points, liveCards, activeDynamicDeckIds:activeDynIds,
+    status:writingPhase?'writing':'lobby',
+    pointsToWin:points,liveCards,activeDynamicDeckIds:activeDynIds,
     players:{[myId]:{name:myName,score:0,hand:myCards}},
-    host:myId, questionDeck:questions, answerDeck:answers,
-    currentQuestion:null, submissions:{}, czar:myId, round:0,
-    revealIndex:-1, rankingOrder:[],
-    createdAt:new Date()
+    host:myId,questionDeck:questions,answerDeck:answers,
+    currentQuestion:null,submissions:{},czar:myId,round:0,
+    revealIndex:-1,rankingOrder:[],createdAt:new Date()
   });
-
   saveSession();
   document.getElementById('display-room-code').textContent=roomId;
-  if(writingPhase){ showScreen('screen-writing'); }
+  if(writingPhase)showScreen('screen-writing');
   else showScreen('screen-lobby');
   listenRoom();
 });
 
-// ═══════════════════════════════════════════════
-// REJOINDRE
-// ═══════════════════════════════════════════════
+// ═══ REJOINDRE ═══════════════════════════════════
 document.getElementById('btn-join').addEventListener('click',async()=>{
   myName=document.getElementById('input-player-name').value.trim();
   const code=document.getElementById('input-room-code').value.trim().toUpperCase();
-  if(!myName) return alert("Entre ton prénom !");
-  if(!code) return alert("Entre un code !");
+  if(!myName)return alert("Entre ton prénom !");
+  if(!code)return alert("Entre un code !");
   const doc=await db.collection('rooms').doc(code).get();
-  if(!doc.exists) return alert("Salle introuvable !");
+  if(!doc.exists)return alert("Salle introuvable !");
   const data=doc.data();
-  if(data.status!=='lobby'&&data.status!=='writing') return alert("La partie a déjà commencé !");
-  roomId=code; myId=genId();
+  if(data.status!=='lobby'&&data.status!=='writing')return alert("La partie a déjà commencé !");
+  roomId=code;myId=genId();
   const deck=[...data.answerDeck];
   const myCards=deck.splice(0,7);
   await db.collection('rooms').doc(roomId).update({
@@ -590,59 +591,65 @@ document.getElementById('btn-join').addEventListener('click',async()=>{
   listenRoom();
 });
 
-// ═══════════════════════════════════════════════
-// LISTENER
-// ═══════════════════════════════════════════════
+// ═══ LISTENER ════════════════════════════════════
 function listenRoom(){
-  if(unsubscribe) unsubscribe();
-  unsubscribe=db.collection('rooms').doc(roomId).onSnapshot(doc=>{
-    if(!doc.exists) return;
+  if(unsubscribe)unsubscribe();
+  unsubscribe=db.collection('rooms').doc(roomId).onSnapshot(async doc=>{
+    if(!doc.exists)return;
     gameState=doc.data();
     myHand=gameState.players[myId]?.hand||[];
     liveCardsEnabled=gameState.liveCards||false;
     activeDynamicDeckIds=gameState.activeDynamicDeckIds||[];
+
+    // Fermeture auto si 1 joueur restant en cours de partie
+    const playerCount=Object.keys(gameState.players||{}).length;
+    const inGame=['playing','revealing','ranking','round_result'].includes(gameState.status);
+    if(inGame && playerCount<=1 && myId===Object.keys(gameState.players)[0]){
+      await db.collection('rooms').doc(roomId).update({status:'ended',finalWinner:myId});
+      return;
+    }
+
+    // Bouton quitter en jeu
+    const qBtn=document.getElementById('quit-ingame-btn');
+    const showQuit=['playing','revealing','ranking','round_result','writing','lobby'].includes(gameState.status);
+    if(showQuit)qBtn.classList.remove('hidden');
+    else qBtn.classList.add('hidden');
+
     const s=gameState.status;
-    if(s==='writing') renderWritingPhase(gameState);
-    else if(s==='lobby') renderLobby(gameState);
-    else if(s==='playing') renderGame(gameState);
-    else if(s==='revealing') renderReveal(gameState);
-    else if(s==='ranking') renderRanking(gameState);
-    else if(s==='round_result') renderRoundResult(gameState);
-    else if(s==='ended') renderEnd(gameState);
+    if(s==='writing')renderWritingPhase(gameState);
+    else if(s==='lobby')renderLobby(gameState);
+    else if(s==='playing')renderGame(gameState);
+    else if(s==='revealing')renderReveal(gameState);
+    else if(s==='ranking')renderRanking(gameState);
+    else if(s==='round_result')renderRoundResult(gameState);
+    else if(s==='ended')renderEnd(gameState);
     renderFloatingBtns();
   });
 }
 
-// ═══════════════════════════════════════════════
-// PHASE ÉCRITURE
-// ═══════════════════════════════════════════════
+// ═══ PHASE ÉCRITURE ══════════════════════════════
 function renderWritingPhase(state){
   showScreen('screen-writing');
   const btns=document.getElementById('writing-deck-btns');
   btns.innerHTML='';
   (state.activeDynamicDeckIds||[]).forEach(did=>{
-    const d=dynamicDecks[did];
-    if(!d) return;
+    const d=dynamicDecks[did];if(!d)return;
     const b=document.createElement('button');
     b.style.cssText=`background:${d.color};color:#1a1a2e;border-radius:20px;padding:8px 16px;border:none;cursor:pointer;font-weight:bold;font-size:0.85rem;width:auto;margin:0;`;
-    b.textContent=`+ ${d.name}`;
-    b.onclick=()=>openOverlay(did);
+    b.textContent=`+ ${d.name}`;b.onclick=()=>openOverlay(did);
     btns.appendChild(b);
   });
   document.getElementById('writing-status').textContent=
     myId===state.host?'Tu peux lancer la partie quand tu veux.':'En attente que l\'hôte lance la partie...';
   const btnEnd=document.getElementById('btn-end-writing');
-  if(myId===state.host) btnEnd.classList.remove('hidden');
+  if(myId===state.host)btnEnd.classList.remove('hidden');
   else btnEnd.classList.add('hidden');
 }
-
 document.getElementById('btn-end-writing').addEventListener('click',async()=>{
   await db.collection('rooms').doc(roomId).update({status:'lobby'});
 });
 
-// ═══════════════════════════════════════════════
-// LOBBY
-// ═══════════════════════════════════════════════
+// ═══ LOBBY ═══════════════════════════════════════
 function renderLobby(state){
   showScreen('screen-lobby');
   const ids=Object.keys(state.players);
@@ -658,22 +665,19 @@ function renderLobby(state){
     btn.textContent=ids.length>=2?'🚀 Lancer la partie':'⏳ En attente...';
   }
 }
-
 document.getElementById('btn-start-game').addEventListener('click',async()=>{
   const doc=await db.collection('rooms').doc(roomId).get();
   const data=doc.data();
-  if(Object.keys(data.players).length<2) return alert("Il faut au moins 2 joueurs !");
+  if(Object.keys(data.players).length<2)return alert("Il faut au moins 2 joueurs !");
   const qd=[...data.questionDeck];
   const fq=qd.shift();
   await db.collection('rooms').doc(roomId).update({
-    status:'playing', currentQuestion:fq, questionDeck:qd,
-    czar:data.host, submissions:{}, round:1, revealIndex:-1
+    status:'playing',currentQuestion:fq,questionDeck:qd,
+    czar:data.host,submissions:{},round:1,revealIndex:-1
   });
 });
 
-// ═══════════════════════════════════════════════
-// SCOREBOARD
-// ═══════════════════════════════════════════════
+// ═══ SCOREBOARD ══════════════════════════════════
 function renderScoreboard(state){
   const sorted=Object.entries(state.players).sort((a,b)=>b[1].score-a[1].score);
   document.getElementById('score-board').innerHTML=`
@@ -686,9 +690,7 @@ function renderScoreboard(state){
     </div>`;
 }
 
-// ═══════════════════════════════════════════════
-// JEU — PHASE SOUMISSION
-// ═══════════════════════════════════════════════
+// ═══ JEU — SOUMISSION ════════════════════════════
 function renderGame(state){
   showScreen('screen-game');
   renderScoreboard(state);
@@ -696,7 +698,7 @@ function renderGame(state){
   const subs=state.submissions||{};
   const nonCzar=Object.keys(state.players).filter(id=>id!==state.czar);
   const pending=nonCzar.filter(id=>!subs[id]);
-  const done=nonCzar.filter(id=>!!subs[id]);
+  const blanks=countBlanks(state.currentQuestion);
 
   const waitingHtml=`
     <div class="waiting-players">
@@ -715,54 +717,112 @@ function renderGame(state){
         <div class="status-msg">Tu es le maître du jeu 👑<br>En attente des réponses...</div>
         ${waitingHtml}`;
     } else {
-      // Toutes les cartes sont là, passer en phase reveal
-      if(myId===state.czar){
-        const cards=Object.entries(subs);
-        const shuffled=shuffle(cards);
-        db.collection('rooms').doc(roomId).update({
-          status:'revealing',
-          revealOrder: shuffled.map(([pid])=>pid),
-          revealIndex:0
-        });
-      }
+      const cards=Object.entries(subs);
+      const shuffled=shuffle(cards);
+      db.collection('rooms').doc(roomId).update({
+        status:'revealing',
+        revealOrder:shuffled.map(([pid])=>pid),
+        revealIndex:0
+      });
     }
   } else {
     if(subs[myId]!==undefined){
+      // Affiche la question avec les réponses soumises
+      const submitted=subs[myId];
+      const ansArr=Array.isArray(submitted)?submitted:[submitted];
       document.getElementById('game-content').innerHTML=`
-        ${qHtmlStr}
-        <div class="status-msg">Carte envoyée ✅</div>
+        <div class="card-question">${qHtml(state.currentQuestion,ansArr)}</div>
+        <div class="status-msg">Carte(s) envoyée(s) ✅</div>
         ${waitingHtml}`;
     } else {
+      // Sélection — gère multi-trous
+      selectedCards=[];
+      const needCount=blanks;
       document.getElementById('game-content').innerHTML=`
         ${qHtmlStr}
-        <div class="status-msg">Choisis une carte à jouer</div>
-        <div class="hand">
-          ${myHand.map((c,i)=>`
-            <div class="card-answer" onclick="selectCard(${i})" id="card-${i}">${c}</div>`).join('')}
+        <div class="status-msg" id="pick-status">
+          ${needCount>1?`Choisis ${needCount} cartes dans l'ordre`:'Choisis une carte à jouer'}
         </div>
-        <button class="btn-green" id="btn-submit" onclick="submitCard()" style="display:none">Jouer cette carte ✓</button>`;
+        <div class="hand" id="hand-cards">
+          ${myHand.map((c,i)=>`
+            <div class="card-answer" onclick="selectCard(${i})" id="card-${i}">
+              ${c}
+            </div>`).join('')}
+        </div>
+        <button class="btn-green hidden" id="btn-submit" onclick="submitCard()">
+          ${needCount>1?`Jouer ces ${needCount} cartes ✓`:'Jouer cette carte ✓'}
+        </button>`;
     }
   }
 }
 
+// Sélection multi-cartes
 window.selectCard=(i)=>{
-  selectedCard=i;
-  document.querySelectorAll('.card-answer').forEach(c=>c.classList.remove('selected'));
-  document.getElementById(`card-${i}`)?.classList.add('selected');
-  document.getElementById('btn-submit').style.display='block';
+  const state=gameState;
+  const blanks=countBlanks(state.currentQuestion);
+  const pos=selectedCards.indexOf(i);
+
+  if(pos!==-1){
+    // Désélectionner
+    selectedCards.splice(pos,1);
+  } else {
+    if(selectedCards.length>=blanks) return; // déjà assez
+    selectedCards.push(i);
+  }
+
+  // Mise à jour visuelle
+  myHand.forEach((_,idx)=>{
+    const el=document.getElementById(`card-${idx}`);
+    if(!el)return;
+    el.classList.remove('selected','selected-2');
+    // Retire les badges
+    el.querySelectorAll('.card-order-badge').forEach(b=>b.remove());
+    const order=selectedCards.indexOf(idx);
+    if(order!==-1){
+      el.classList.add(order===0?'selected':'selected-2');
+      if(blanks>1){
+        const badge=document.createElement('span');
+        badge.className=`card-order-badge badge-${order+1}`;
+        badge.textContent=order+1;
+        el.appendChild(badge);
+      }
+    }
+  });
+
+  // Mise à jour de la question preview
+  const ansPreview=selectedCards.map(idx=>myHand[idx]);
+  const qEl=document.querySelector('.card-question');
+  if(qEl) qEl.innerHTML=qHtml(state.currentQuestion, ansPreview);
+
+  // Bouton soumettre
+  const btn=document.getElementById('btn-submit');
+  if(btn) btn.classList.toggle('hidden', selectedCards.length<blanks);
+
+  // Status
+  const statusEl=document.getElementById('pick-status');
+  if(statusEl){
+    if(blanks>1) statusEl.textContent=`${selectedCards.length}/${blanks} cartes sélectionnées`;
+  }
 };
 
 window.submitCard=async()=>{
-  if(selectedCard===null) return;
+  if(!selectedCards.length)return;
+  const state=gameState;
+  const blanks=countBlanks(state.currentQuestion);
+  if(selectedCards.length<blanks)return;
+  const submission=blanks===1?myHand[selectedCards[0]]:selectedCards.map(i=>myHand[i]);
   await db.collection('rooms').doc(roomId).update({
-    [`submissions.${myId}`]:myHand[selectedCard]
+    [`submissions.${myId}`]:submission
   });
-  selectedCard=null;
+  selectedCards=[];
 };
 
-// ═══════════════════════════════════════════════
-// PHASE REVEAL — défilement une à une
-// ═══════════════════════════════════════════════
+// ═══ PHASE REVEAL ════════════════════════════════
+function submissionText(sub){
+  if(Array.isArray(sub))return sub.join(' · ');
+  return sub;
+}
+
 function renderReveal(state){
   showScreen('screen-game');
   renderScoreboard(state);
@@ -770,65 +830,54 @@ function renderReveal(state){
   const order=state.revealOrder||[];
   const idx=state.revealIndex||0;
   const subs=state.submissions||{};
-  const revealed=order.slice(0,idx); // cartes déjà vues
+  const revealed=order.slice(0,idx);
   const total=order.length;
-
   const qHtmlStr=`<div class="card-question">${qHtml(state.currentQuestion)}</div>`;
 
-  // Cartes déjà révélées (petites, en bas)
   const revealedHtml=revealed.length>0?`
     <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;justify-content:center;">
       ${revealed.map(pid=>`
-        <div style="background:#16213e;border:1px solid #444;border-radius:8px;padding:8px 12px;font-size:0.85rem;max-width:160px;text-align:center;">
-          ${subs[pid]}
+        <div style="background:#16213e;border:1px solid #444;border-radius:8px;padding:8px 12px;font-size:0.85rem;max-width:180px;text-align:center;">
+          ${submissionText(subs[pid])}
         </div>`).join('')}
     </div>`:'';
 
   if(idx>=total){
-    // Toutes révélées → passer au classement
     if(isCzar){
       const rankingOrder=order.map(pid=>pid);
       db.collection('rooms').doc(roomId).update({status:'ranking',rankingOrder});
     } else {
       document.getElementById('game-content').innerHTML=`
         ${qHtmlStr}
-        <div class="status-msg">Toutes les cartes ont été révélées !<br>Le maître du jeu fait son classement...</div>
+        <div class="status-msg">Toutes les cartes ont été révélées !<br>Le maître du jeu classe...</div>
         ${revealedHtml}`;
     }
     return;
   }
 
-  const currentCard=subs[order[idx]];
+  const currentSub=subs[order[idx]];
+  const currentText=submissionText(currentSub);
+  const currentAns=Array.isArray(currentSub)?currentSub:[currentSub];
 
   if(isCzar){
     document.getElementById('game-content').innerHTML=`
-      ${qHtmlStr}
-      <div class="card-counter">${idx+1} / ${total}</div>
-      <div class="big-card" onclick="nextReveal()">
-        ${currentCard}
-        <br><span style="font-size:0.7rem;color:#aaa;margin-top:8px;">Clique pour voir la suivante →</span>
-      </div>
+      <div class="card-question">${qHtml(state.currentQuestion,currentAns)}</div>
+      <div class="card-counter">${idx+1} / ${total} — clique pour continuer →</div>
+      <div class="big-card" onclick="nextReveal()">${currentText}</div>
       ${revealedHtml}`;
   } else {
     document.getElementById('game-content').innerHTML=`
-      ${qHtmlStr}
+      <div class="card-question">${qHtml(state.currentQuestion,currentAns)}</div>
       <div class="card-counter">${idx+1} / ${total}</div>
-      <div class="big-card" style="cursor:default;pointer-events:none;">
-        ${currentCard}
-      </div>
+      <div class="big-card" style="cursor:default;pointer-events:none;">${currentText}</div>
       ${revealedHtml}`;
   }
 }
-
 window.nextReveal=async()=>{
-  const state=gameState;
-  const newIdx=(state.revealIndex||0)+1;
-  await db.collection('rooms').doc(roomId).update({revealIndex:newIdx});
+  await db.collection('rooms').doc(roomId).update({revealIndex:(gameState.revealIndex||0)+1});
 };
 
-// ═══════════════════════════════════════════════
-// PHASE RANKING — drag & drop + double-clic
-// ═══════════════════════════════════════════════
+// ═══ PHASE RANKING ═══════════════════════════════
 function renderRanking(state){
   showScreen('screen-game');
   renderScoreboard(state);
@@ -841,21 +890,20 @@ function renderRanking(state){
     const likedId=state.likedCard||null;
     document.getElementById('game-content').innerHTML=`
       ${qHtmlStr}
-      <div class="status-msg">Classe les cartes par glisser-déposer.<br>Double-clique sur la meilleure 💛</div>
+      <div class="status-msg">Glisse pour classer · Double-clique pour choisir le gagnant 💛</div>
       <div class="ranking-area" id="ranking-area">
         ${order.map(pid=>`
           <div class="rank-card ${pid===likedId?'liked':''}"
-            draggable="true" id="rcard-${pid}"
-            data-pid="${pid}"
-            ondragstart="dragStart(event)"
-            ondragover="dragOver(event)"
-            ondrop="dropCard(event)"
+            draggable="true" id="rcard-${pid}" data-pid="${pid}"
+            ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="dropCard(event)"
             ondblclick="likeCard('${pid}')">
-            ${subs[pid]}
+            ${submissionText(subs[pid])}
             ${pid===likedId?'<div style="font-size:1.2rem;margin-top:4px;">💛</div>':''}
           </div>`).join('')}
       </div>
-      ${likedId?`<button class="btn-green" onclick="confirmWinner('${likedId}')">Choisir cette carte comme gagnante ✓</button>`:'<div class="status-msg">Double-clique pour liker une carte</div>'}`;
+      ${likedId
+        ?`<button class="btn-green" onclick="confirmWinner('${likedId}')">Choisir cette carte ✓</button>`
+        :'<div class="status-msg">Double-clique pour liker</div>'}`;
   } else {
     const likedId=state.likedCard||null;
     document.getElementById('game-content').innerHTML=`
@@ -864,57 +912,53 @@ function renderRanking(state){
       <div class="ranking-area" style="pointer-events:none;">
         ${order.map(pid=>`
           <div class="rank-card ${pid===likedId?'liked':''}" style="cursor:default;">
-            ${subs[pid]}
+            ${submissionText(subs[pid])}
             ${pid===likedId?'<div style="font-size:1.2rem;margin-top:4px;">💛</div>':''}
           </div>`).join('')}
       </div>`;
   }
 }
-
-// Drag & drop
-window.dragStart=(e)=>{ dragSrc=e.target.closest('.rank-card'); };
-window.dragOver=(e)=>{ e.preventDefault(); };
+window.dragStart=(e)=>{dragSrc=e.target.closest('.rank-card');};
+window.dragOver=(e)=>{e.preventDefault();};
 window.dropCard=async(e)=>{
   e.preventDefault();
   const target=e.target.closest('.rank-card');
-  if(!target||!dragSrc||target===dragSrc) return;
+  if(!target||!dragSrc||target===dragSrc)return;
   const order=[...gameState.rankingOrder];
   const from=order.indexOf(dragSrc.dataset.pid);
   const to=order.indexOf(target.dataset.pid);
-  order.splice(from,1); order.splice(to,0,dragSrc.dataset.pid);
+  order.splice(from,1);order.splice(to,0,dragSrc.dataset.pid);
   await db.collection('rooms').doc(roomId).update({rankingOrder:order});
 };
-
 window.likeCard=async(pid)=>{
   await db.collection('rooms').doc(roomId).update({likedCard:pid});
 };
+window.confirmWinner=async(winnerId)=>{ await czarPickWinner(winnerId); };
 
-window.confirmWinner=async(winnerId)=>{
-  await czarPickWinner(winnerId);
-};
-
-// ═══════════════════════════════════════════════
-// CZAR CHOISIT LE GAGNANT
-// ═══════════════════════════════════════════════
+// ═══ CZAR CHOISIT ════════════════════════════════
 async function czarPickWinner(winnerId){
   const state=gameState;
   const newScore=(state.players[winnerId].score||0)+1;
   const answerDeck=[...state.answerDeck];
+  const blanks=countBlanks(state.currentQuestion);
   const updates={
-    status: newScore>=state.pointsToWin?'ended':'round_result',
+    status:newScore>=state.pointsToWin?'ended':'round_result',
     roundWinner:winnerId,
     [`players.${winnerId}.score`]:newScore,
     likedCard:null
   };
-  if(newScore>=state.pointsToWin) updates.finalWinner=winnerId;
+  if(newScore>=state.pointsToWin)updates.finalWinner=winnerId;
 
-  // Renouvelle les cartes
   for(const pid of Object.keys(state.players)){
     if(pid!==state.czar){
       const played=state.submissions[pid];
-      const nc=answerDeck.shift()||shuffle(Object.values(STATIC_DECKS).flatMap(d=>d.answers))[0];
-      const nh=state.players[pid].hand.filter(c=>c!==played);
-      nh.push(nc);
+      const playedArr=Array.isArray(played)?played:[played];
+      const nh=state.players[pid].hand.filter(c=>!playedArr.includes(c));
+      // Recharge autant de cartes que de trous joués
+      for(let i=0;i<playedArr.length;i++){
+        const nc=answerDeck.shift()||shuffle(Object.values(STATIC_DECKS).flatMap(d=>d.answers))[0];
+        nh.push(nc);
+      }
       updates[`players.${pid}.hand`]=nh;
     }
   }
@@ -922,24 +966,22 @@ async function czarPickWinner(winnerId){
   await db.collection('rooms').doc(roomId).update(updates);
 }
 
-// ═══════════════════════════════════════════════
-// RÉSULTAT DE MANCHE
-// ═══════════════════════════════════════════════
+// ═══ RÉSULTAT MANCHE ═════════════════════════════
 function renderRoundResult(state){
   showScreen('screen-game');
   renderScoreboard(state);
   const winner=state.players[state.roundWinner];
-  const winningCard=state.submissions[state.roundWinner];
   const isNextCzar=myId===state.roundWinner;
-  // Révèle les auteurs
+  const winSub=state.submissions[state.roundWinner];
+  const winAns=Array.isArray(winSub)?winSub:[winSub];
   const allCards=Object.entries(state.submissions||{});
   document.getElementById('game-content').innerHTML=`
-    <div class="card-question">${qHtml(state.currentQuestion, state.submissions[state.roundWinner])}</div>
+    <div class="card-question">${qHtml(state.currentQuestion,winAns)}</div>
     <div style="text-align:center;margin-bottom:12px;color:#e2b96f;font-weight:bold;">🏆 ${winner.name} gagne cette manche !</div>
     <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:20px;">
-      ${allCards.map(([pid,card])=>`
+      ${allCards.map(([pid,sub])=>`
         <div class="rank-card ${pid===state.roundWinner?'liked':''}" style="cursor:default;">
-          ${card}
+          ${submissionText(sub)}
           <div class="author">${state.players[pid]?.name||'?'}</div>
           ${pid===state.roundWinner?'<div style="font-size:1rem;">🏆</div>':''}
         </div>`).join('')}
@@ -948,45 +990,42 @@ function renderRoundResult(state){
       ?`<button class="btn-green" onclick="nextRound()">Manche suivante →</button>`
       :`<div class="status-msg">${winner.name} prépare la prochaine manche...</div>`}`;
 }
-
 window.nextRound=async()=>{
   const state=gameState;
   let qd=[...state.questionDeck];
-
-  // Si liveCards, on recharge les decks dynamiques et on ajoute les nouvelles cartes
-  if(state.liveCards && state.activeDynamicDeckIds?.length){
+  if(state.liveCards&&state.activeDynamicDeckIds?.length){
     await loadDynamicDecks();
-    let newQ=[], newA=[];
+    let newQ=[],newA=[];
     for(const did of state.activeDynamicDeckIds){
       const d=dynamicDecks[did];
-      if(d){newQ.push(...d.questions); newA.push(...d.answers);}
+      if(d){newQ.push(...d.questions);newA.push(...d.answers);}
     }
-    // Ajoute uniquement les cartes pas déjà dans le deck
     const existingQ=new Set([...qd,...(state.usedQuestions||[])]);
     const existingA=new Set([...(state.answerDeck||[])]);
     const freshQ=newQ.filter(q=>!existingQ.has(q));
     const freshA=newA.filter(a=>!existingA.has(a));
-    if(freshQ.length) qd.push(...shuffle(freshQ));
+    if(freshQ.length)qd.push(...shuffle(freshQ));
   }
-
   if(!qd.length){
     await db.collection('rooms').doc(roomId).update({status:'ended',finalWinner:state.roundWinner});
     return;
   }
   const nq=qd.shift();
   await db.collection('rooms').doc(roomId).update({
-    status:'playing', currentQuestion:nq, questionDeck:qd,
-    czar:state.roundWinner, submissions:{}, round:(state.round||0)+1,
-    revealIndex:-1, rankingOrder:[], likedCard:null
+    status:'playing',currentQuestion:nq,questionDeck:qd,
+    czar:state.roundWinner,submissions:{},round:(state.round||0)+1,
+    revealIndex:-1,rankingOrder:[],likedCard:null
   });
 };
 
-// ═══════════════════════════════════════════════
-// FIN
-// ═══════════════════════════════════════════════
+// ═══ FIN ═════════════════════════════════════════
 function renderEnd(state){
   clearSession();
   showScreen('screen-end');
+  if(!state.finalWinner||!state.players[state.finalWinner]){
+    document.getElementById('end-content').innerHTML=`<div style="font-size:1.2rem;color:#aaa;">La partie s'est terminée.</div>`;
+    return;
+  }
   const winner=state.players[state.finalWinner];
   const sorted=Object.values(state.players).sort((a,b)=>b.score-a.score);
   document.getElementById('end-content').innerHTML=`
@@ -995,23 +1034,20 @@ function renderEnd(state){
     <div style="background:#16213e;border-radius:12px;padding:16px;margin-bottom:20px;">
       ${sorted.map((p,i)=>`
         <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #333;color:${i===0?'#e2b96f':'white'}">
-          <span>${['🥇','🥈','🥉'][i]||'  '} ${p.name}</span>
+          <span>${['🥇','🥈','🥉'][i]||''} ${p.name}</span>
           <span>${p.score} pts</span>
         </div>`).join('')}
     </div>`;
 }
 
-// ═══════════════════════════════════════════════
-// BOUTONS FLOTTANTS + OVERLAY AJOUT CARTE
-// ═══════════════════════════════════════════════
+// ═══ FLOTTANTS + OVERLAY ═════════════════════════
 function renderFloatingBtns(){
   const active=['playing','revealing','ranking','round_result','writing'];
   const container=document.getElementById('floating-btns');
   container.innerHTML='';
-  if(!active.includes(gameState?.status)) return;
+  if(!active.includes(gameState?.status))return;
   (activeDynamicDeckIds||[]).forEach(did=>{
-    const d=dynamicDecks[did];
-    if(!d) return;
+    const d=dynamicDecks[did];if(!d)return;
     const btn=document.createElement('button');
     btn.className='float-btn';
     btn.style.background=d.color||'#a78bfa';
@@ -1022,58 +1058,43 @@ function renderFloatingBtns(){
     container.appendChild(btn);
   });
 }
-
 function openOverlay(deckId){
-  currentOverlayDeckId=deckId;
-  currentCardType='answer';
+  currentOverlayDeckId=deckId;currentCardType='answer';
   const d=dynamicDecks[deckId];
   document.getElementById('overlay-deck-title').textContent=`+ Carte pour : ${d?.name||deckId}`;
   document.getElementById('overlay-card-text').value='';
   updateOverlayHint();
   document.getElementById('overlay-add-card').classList.remove('hidden');
 }
-
-window.closeOverlay=()=>{
-  document.getElementById('overlay-add-card').classList.add('hidden');
-};
-
+window.closeOverlay=()=>{ document.getElementById('overlay-add-card').classList.add('hidden'); };
 window.setCardType=(type)=>{
-  currentCardType=type;
-  updateOverlayHint();
+  currentCardType=type;updateOverlayHint();
   document.getElementById('overlay-btn-question').style.background=type==='question'?'#4ecca3':'#333';
   document.getElementById('overlay-btn-answer').style.background=type==='answer'?'#4ecca3':'#333';
 };
-
 function updateOverlayHint(){
   document.getElementById('overlay-hint').textContent=
     currentCardType==='question'
-      ? 'Utilise ___ pour indiquer le trou dans la phrase'
-      : 'Un mot, une expression, une action...';
+      ?'Utilise _ pour chaque trou (ex: "J\'aime _ et _.")'
+      :'Un mot, une expression, une action...';
 }
-
 window.submitNewCard=async()=>{
   const text=document.getElementById('overlay-card-text').value.trim();
-  if(!text) return alert("Écris quelque chose !");
-  const normalized = normalizeMarker(text);
-  if(currentCardType==='question' && !normalized.includes('___'))
-  return alert("La question doit contenir _ pour marquer le trou !");
-
+  if(!text)return alert("Écris quelque chose !");
+  const normalized=normalizeMarker(text);
+  if(currentCardType==='question'&&!normalized.includes('___'))
+    return alert("La question doit contenir au moins un _ pour le trou !");
   const field=currentCardType==='question'?'questions':'answers';
   const ref=db.collection('dynamic_decks').doc(currentOverlayDeckId);
   const doc=await ref.get();
   const current=doc.data()?.[field]||[];
-  const cardText = currentCardType==='question' ? normalizeMarker(text) : text;
-  await ref.update({[field]:[...current, cardText]});
-  if(dynamicDecks[currentOverlayDeckId]){
-  dynamicDecks[currentOverlayDeckId][field]=[...current, cardText];
-  }
-
+  const cardText=currentCardType==='question'?normalized:text;
+  await ref.update({[field]:[...current,cardText]});
+  if(dynamicDecks[currentOverlayDeckId])dynamicDecks[currentOverlayDeckId][field]=[...current,cardText];
   closeOverlay();
 };
 
-// ═══════════════════════════════════════════════
-// DÉMARRAGE
-// ═══════════════════════════════════════════════
+// ═══ DÉMARRAGE ═══════════════════════════════════
 init();
 </script>
 </body>

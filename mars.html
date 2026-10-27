@@ -75,6 +75,15 @@
     .filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid #444; background: #16213e; color: #aaa; cursor: pointer; font-size: 0.85rem; }
     .filter-btn.active { background: #e2b96f; color: #1a1a2e; border-color: #e2b96f; font-weight: bold; }
     .search-input { padding: 7px 12px; border-radius: 20px; border: 1px solid #333; background: #16213e; color: white; font-size: 0.85rem; width: 160px; }
+  
+    /* TAG SUPPRIMER */
+    .photo-card.delete-tagged { border-color: #e94560; }
+    .photo-card .delete-badge { position: absolute; top: 6px; left: 6px; background: #e94560; color: white; border-radius: 50%; width: 22px; height: 22px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .delete-count { font-size: 0.75rem; color: #e94560; }
+    .lb-delete-btn { padding: 12px 28px; border-radius: 10px; border: none; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.2s; }
+    .lb-delete-btn.tag { background: #e94560; color: white; }
+    .lb-delete-btn.untag { background: #555; color: white; }  
+  
   </style>
 </head>
 <body>
@@ -89,7 +98,8 @@
     <span class="stat-chip" id="stat-voted">Mes votes : 0</span>
     <span class="stat-chip" id="stat-total">Photos : —</span>
     <span class="stat-chip" id="stat-voters">Votants : —</span>
-    <button class="btn-top btn-results" onclick="showResults()">🏆 Top 100</button>
+    <button class="btn-top btn-results" onclick="showResults('top')">🏆 Top 100</button>
+<button class="btn-top" style="background:#e94560;color:white;" onclick="showResults('delete')">🗑️ À supprimer</button>
   </div>
 </div>
 
@@ -135,8 +145,10 @@
   <img id="lb-img" src="" alt=""/>
   <div class="lb-count" id="lb-count"></div>
   <div class="lightbox-actions">
-    <button class="lb-vote-btn" id="lb-vote-btn" onclick="toggleVoteLightbox()">❤️ Voter</button>
-  </div>
+  <button class="lb-vote-btn" id="lb-vote-btn" onclick="toggleVoteLightbox()">❤️ Voter</button>
+  <button class="lb-delete-btn" id="lb-delete-btn" onclick="toggleDeleteLightbox()">🗑️ À supprimer</button>
+</div>
+<div class="lb-count" id="lb-delete-count" style="color:#e94560;"></div>
 </div>
 
 <script>
@@ -161,7 +173,9 @@ let voterName = '';
 let voterId = '';
 let allPhotos = [];       // [{id, name, url, thumb}]
 let votes = {};           // { photoId: count }
-let myVotes = new Set();  // set des photoIds votés par moi
+let myVotes = new Set();
+let myDeletes = new Set();  // set des photoIds tagués à supprimer
+let deleteCounts = {};      // { photoId: count }
 let currentFilter = 'all';
 let lightboxPhotoId = null;
 let unsubVotes = null;
@@ -214,10 +228,11 @@ async function loadEverything(){
 
   // 3. Charge les votes existants de ce votant
   const myVoteDoc = await db.collection('camp_votes').doc(voterId).get();
-  if(myVoteDoc.exists){
-    const data = myVoteDoc.data();
-    myVotes = new Set(data.voted || []);
-  }
+if(myVoteDoc.exists){
+  const data = myVoteDoc.data();
+  myVotes = new Set(data.voted || []);
+  myDeletes = new Set(data.deleted || []);
+}
 
   // 4. Écoute les compteurs de votes en temps réel
   listenVoteCounts();
@@ -226,18 +241,25 @@ async function loadEverything(){
 }
 
 // ═══ VOTES TEMPS RÉEL ════════════════════════════
+let unsubDeletes = null;
+
 function listenVoteCounts(){
   if(unsubVotes) unsubVotes();
+  if(unsubDeletes) unsubDeletes();
+
   unsubVotes = db.collection('camp_vote_counts').doc('counts').onSnapshot(doc => {
     votes = doc.exists ? (doc.data() || {}) : {};
     updateStats();
     renderGrid();
     showScreen('screen-vote');
-
-    // Compteur votants
     db.collection('camp_voters').get().then(snap => {
       $('stat-voters').textContent = `Votants : ${snap.size}`;
     });
+  });
+
+  unsubDeletes = db.collection('camp_delete_counts').doc('counts').onSnapshot(doc => {
+    deleteCounts = doc.exists ? (doc.data() || {}) : {};
+    renderGrid();
   });
 }
 
@@ -278,6 +300,35 @@ async function toggleVote(photoId){
   await batch.commit();
 }
 
+async function toggleDelete(photoId){
+  const wasTagged = myDeletes.has(photoId);
+  const delta = wasTagged ? -1 : 1;
+
+  if(wasTagged) myDeletes.delete(photoId);
+  else myDeletes.add(photoId);
+
+  deleteCounts[photoId] = Math.max(0, (deleteCounts[photoId] || 0) + delta);
+  updateCard(photoId);
+  updateLightboxDeleteBtn(photoId);
+
+  const batch = db.batch();
+  batch.set(db.collection('camp_votes').doc(voterId), {
+    name: voterName,
+    voted: Array.from(myVotes),
+    deleted: Array.from(myDeletes),
+    updatedAt: new Date()
+  });
+  batch.set(db.collection('camp_delete_counts').doc('counts'), {
+    [photoId]: firebase.firestore.FieldValue.increment(delta)
+  }, {merge: true});
+
+  await batch.commit();
+}
+
+window.toggleDeleteLightbox = () => {
+  if(lightboxPhotoId) toggleDelete(lightboxPhotoId);
+};
+  
 // ═══ RENDU GRILLE ════════════════════════════════
 function getFilteredPhotos(){
   let list = [...allPhotos];
@@ -318,13 +369,16 @@ function createCard(photo){
   const div = document.createElement('div');
   div.className = `photo-card ${voted?'voted':''}`;
   div.dataset.id = photo.id;
-  div.innerHTML = `
-    <img src="${photo.thumb}" alt="${photo.name}" loading="lazy" onerror="this.src='${photo.url}'"/>
-    <div class="overlay">
-      <span class="vote-count">❤️ ${count}</span>
-      <span class="vote-icon">${voted?'💛':'🤍'}</span>
-    </div>
-    ${voted?'<div class="voted-badge">✓</div>':''}`;
+  const deleted = myDeletes.has(photo.id);
+const delCount = deleteCounts[photo.id] || 0;
+div.innerHTML = `
+  <img src="${photo.thumb}" alt="${photo.name}" loading="lazy" onerror="this.src='${photo.url}'"/>
+  <div class="overlay">
+    <span class="vote-count">❤️ ${count} ${delCount>0?`<span class="delete-count">· 🗑️ ${delCount}</span>`:''}</span>
+    <span class="vote-icon">${voted?'💛':'🤍'}</span>
+  </div>
+  ${voted?'<div class="voted-badge">✓</div>':''}
+  ${deleted?'<div class="delete-badge">🗑️</div>':''}`;
   div.addEventListener('click', () => openLightbox(photo.id));
   return div;
 }
@@ -333,20 +387,32 @@ function updateCard(photoId){
   const card = document.querySelector(`[data-id="${photoId}"]`);
   if(!card) return;
   const voted = myVotes.has(photoId);
+  const deleted = myDeletes.has(photoId);
   const count = votes[photoId] || 0;
+  const delCount = deleteCounts[photoId] || 0;
+
   card.classList.toggle('voted', voted);
+  card.classList.toggle('delete-tagged', deleted);
+
   const countEl = card.querySelector('.vote-count');
   const iconEl = card.querySelector('.vote-icon');
   const badgeEl = card.querySelector('.voted-badge');
-  if(countEl) countEl.textContent = `❤️ ${count}`;
+  const delBadgeEl = card.querySelector('.delete-badge');
+
+  if(countEl) countEl.innerHTML = `❤️ ${count} ${delCount>0?`<span class="delete-count">· 🗑️ ${delCount}</span>`:''}`;
   if(iconEl) iconEl.textContent = voted ? '💛' : '🤍';
+
   if(voted && !badgeEl){
     const b = document.createElement('div');
-    b.className = 'voted-badge';b.textContent='✓';
+    b.className='voted-badge'; b.textContent='✓';
     card.appendChild(b);
-  } else if(!voted && badgeEl){
-    badgeEl.remove();
-  }
+  } else if(!voted && badgeEl) badgeEl.remove();
+
+  if(deleted && !delBadgeEl){
+    const b = document.createElement('div');
+    b.className='delete-badge'; b.textContent='🗑️';
+    card.appendChild(b);
+  } else if(!deleted && delBadgeEl) delBadgeEl.remove();
 }
 
 // ═══ FILTRE ══════════════════════════════════════
@@ -364,6 +430,7 @@ function openLightbox(photoId){
   lightboxPhotoId = photoId;
   $('lb-img').src = photo.url;
   updateLightboxBtn(photoId);
+  updateLightboxDeleteBtn(photoId);
   $('lightbox').classList.add('open');
 }
 
@@ -375,6 +442,16 @@ function updateLightboxBtn(photoId){
   btn.textContent = voted ? '💔 Retirer mon vote' : '❤️ Voter pour cette photo';
   btn.className = `lb-vote-btn ${voted?'unvote':'vote'}`;
   $('lb-count').textContent = `${count} vote${count>1?'s':''}`;
+}
+
+function updateLightboxDeleteBtn(photoId){
+  if(lightboxPhotoId !== photoId) return;
+  const deleted = myDeletes.has(photoId);
+  const count = deleteCounts[photoId] || 0;
+  const btn = $('lb-delete-btn');
+  btn.textContent = deleted ? '↩️ Annuler suppression' : '🗑️ À supprimer';
+  btn.className = `lb-delete-btn ${deleted?'untag':'tag'}`;
+  $('lb-delete-count').textContent = count > 0 ? `${count} personne${count>1?'s':''} veut supprimer cette photo` : '';
 }
 
 window.toggleVoteLightbox = () => {
@@ -393,22 +470,48 @@ $('lightbox').addEventListener('click', e => {
 });
 
 // ═══ RÉSULTATS ═══════════════════════════════════
-window.showResults = () => {
-  const sorted = [...allPhotos]
-    .map(p => ({...p, count: votes[p.id]||0}))
-    .filter(p => p.count > 0)
-    .sort((a,b) => b.count - a.count)
-    .slice(0, TOP_N);
+window.showResults = (tab = 'top') => {
+  const isDelete = tab === 'delete';
 
-  $('results-subtitle').textContent =
-    `${sorted.length} photos sélectionnées sur ${allPhotos.length} · basé sur ${Object.keys(votes).length} photos votées`;
+  if(isDelete){
+    // Photos les plus taguées à supprimer
+    const sorted = [...allPhotos]
+      .map(p => ({...p, count: deleteCounts[p.id]||0}))
+      .filter(p => p.count > 0)
+      .sort((a,b) => b.count - a.count);
 
-  $('results-grid').innerHTML = sorted.map((p, i) => `
-    <div class="result-card">
-      <img src="${p.thumb}" alt="${p.name}" loading="lazy" onerror="this.src='${p.url}'"/>
-      <div class="rank-badge">#${i+1}</div>
-      <div class="count-badge">❤️ ${p.count}</div>
-    </div>`).join('');
+    $('results-subtitle').textContent =
+      `${sorted.length} photos taguées à supprimer`;
+
+    $('results-grid').innerHTML = sorted.map((p, i) => `
+      <div class="result-card" style="border-color:#e94560;">
+        <img src="${p.thumb}" alt="${p.name}" loading="lazy" onerror="this.src='${p.url}'"/>
+        <div class="rank-badge" style="background:#e94560;">#${i+1}</div>
+        <div class="count-badge">🗑️ ${p.count}</div>
+      </div>`).join('');
+
+    document.querySelector('#screen-results h2').textContent = '🗑️ Photos à supprimer';
+
+  } else {
+    // Top 100
+    const sorted = [...allPhotos]
+      .map(p => ({...p, count: votes[p.id]||0}))
+      .filter(p => p.count > 0)
+      .sort((a,b) => b.count - a.count)
+      .slice(0, TOP_N);
+
+    $('results-subtitle').textContent =
+      `${sorted.length} photos sélectionnées sur ${allPhotos.length}`;
+
+    $('results-grid').innerHTML = sorted.map((p, i) => `
+      <div class="result-card">
+        <img src="${p.thumb}" alt="${p.name}" loading="lazy" onerror="this.src='${p.url}'"/>
+        <div class="rank-badge">#${i+1}</div>
+        <div class="count-badge">❤️ ${p.count}</div>
+      </div>`).join('');
+
+    document.querySelector('#screen-results h2').textContent = '🏆 Top 100 des photos';
+  }
 
   showScreen('screen-results');
 };

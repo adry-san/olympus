@@ -1,36 +1,390 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome on the Platform</title>
+  <title>L'Olympe — Portail des dieux</title>
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: sans-serif; background: #1a1a2e; color: white; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 20px; }
-    h1 { font-size: 1.8rem; color: #e2b96f; margin-bottom: 10px; text-align: center; }
-    p.subtitle { color: #aaa; margin-bottom: 40px; text-align: center; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; max-width: 500px; }
-    .tile { background: #16213e; border: 1px solid #333; border-radius: 16px; padding: 30px 20px; text-align: center; cursor: pointer; transition: transform 0.2s, border-color 0.2s; text-decoration: none; color: white; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-    .tile:hover { transform: translateY(-4px); border-color: #e2b96f; }
-    .tile .icon { font-size: 2.5rem; }
-    .tile .name { font-size: 1rem; font-weight: bold; color: #e2b96f; }
-    .tile .desc { font-size: 0.8rem; color: #aaa; line-height: 1.4; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --gold: #e7c77b;
+      --gold-light: #fff0c2;
+      --sky: #080d20;
+      --white: #f8f3e8;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--white);
+      background:
+        radial-gradient(ellipse at 50% 100%,
+          #29345b 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 0%,
+          #252b4c 0%, transparent 55%),
+        var(--sky);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 50px 24px;
+      position: relative;
+      isolation: isolate;
+    }
+
+    /* Ciel étoilé */
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, white 99%, transparent),
+        radial-gradient(2px 2px at 25% 75%, #e7c77b 99%, transparent),
+        radial-gradient(1px 1px at 80% 15%, white 99%, transparent),
+        radial-gradient(1px 1px at 65% 65%, white 99%, transparent),
+        radial-gradient(2px 2px at 90% 80%, #e7c77b 99%, transparent),
+        radial-gradient(1px 1px at 45% 35%, white 99%, transparent),
+        radial-gradient(1px 1px at 15% 85%, white 99%, transparent),
+        radial-gradient(1px 1px at 72% 42%, white 99%, transparent);
+      background-size: 350px 300px;
+      opacity: 0.7;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-family: sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      font-size: 0.7rem;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: normal;
+      letter-spacing: 3px;
+      color: var(--gold-light);
+      text-shadow: 0 0 35px #e7c77b35;
+    }
+
+    .subtitle {
+      margin-top: 18px;
+      color: #c2c4d5;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      margin: 35px auto 45px;
+      color: var(--gold);
+      font-size: 1.1rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      width: 65px;
+      background: linear-gradient(
+        90deg, transparent, #e7c77b
+      );
+    }
+
+    .divider::after {
+      transform: rotate(180deg);
+    }
+
+    /* Planètes */
+
+    .planets {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 70px;
+    }
+
+    .planet-link {
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 250px;
+      outline-offset: 12px;
+      border-radius: 12px;
+    }
+
+    .planet {
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      isolation: isolate;
+      transition:
+        transform 0.45s ease,
+        box-shadow 0.45s ease;
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .planet-link:nth-child(2) .planet {
+      animation-delay: -2.5s;
+    }
+
+    /* Anneau orbital */
+
+    .planet::before {
+      content: "";
+      position: absolute;
+      inset: -13px;
+      border: 1px solid #e7c77b65;
+      border-radius: 50%;
+      transform: rotate(-25deg) scaleY(0.25);
+      transition: transform 0.45s ease;
+      z-index: -1;
+    }
+
+    /* Lumière autour de la planète */
+
+    .planet::after {
+      content: "";
+      position: absolute;
+      inset: -30px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle, #e7c77b1c, transparent 68%
+      );
+      opacity: 0.5;
+      transition: opacity 0.4s ease;
+      z-index: -2;
+    }
+
+    .planet-link:hover .planet,
+    .planet-link:focus-visible .planet {
+      transform: scale(1.09);
+      box-shadow: 0 0 45px #e7c77b30;
+    }
+
+    .planet-link:hover .planet::before,
+    .planet-link:focus-visible .planet::before {
+      transform: rotate(15deg) scaleY(0.45);
+    }
+
+    .planet-link:hover .planet::after,
+    .planet-link:focus-visible .planet::after {
+      opacity: 1;
+    }
+
+    .planet-icon {
+      font-size: 4.2rem;
+      filter: drop-shadow(0 5px 10px #0008);
+      transition: transform 0.4s ease;
+    }
+
+    .planet-link:hover .planet-icon {
+      transform: scale(1.12);
+    }
+
+    /* Apparence propre à chaque planète */
+
+    .planet-stamp {
+      background:
+        radial-gradient(circle at 30% 25%,
+          #fff0c2 0%, transparent 8%),
+        radial-gradient(circle at 35% 30%,
+          #d4a95d 0%, #92703b 30%,
+          #4d392c 65%, #1c1b2b 100%);
+      box-shadow:
+        inset -18px -12px 35px #0009,
+        inset 8px 8px 20px #fff2,
+        0 0 25px #c69a4d20;
+    }
+
+    .planet-coco {
+      background:
+        radial-gradient(circle at 30% 25%,
+          #d5d9ff 0%, transparent 8%),
+        radial-gradient(circle at 35% 30%,
+          #8c8ee2 0%, #5055a0 35%,
+          #29294f 70%, #12162e 100%);
+      box-shadow:
+        inset -18px -12px 35px #0009,
+        inset 8px 8px 20px #fff2,
+        0 0 25px #747de920;
+    }
+
+    .planet-label {
+      margin-top: 28px;
+      color: var(--gold);
+      font-family: sans-serif;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: color 0.3s ease;
+    }
+
+    .planet-link:hover .planet-label,
+    .planet-link:focus-visible .planet-label {
+      color: var(--gold-light);
+    }
+
+    /* Description révélée au survol */
+
+    .description {
+      font-family: sans-serif;
+      color: #c5c8db;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      max-width: 230px;
+      margin-top: 12px;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition:
+        opacity 0.35s ease,
+        transform 0.35s ease;
+      pointer-events: none;
+    }
+
+    .planet-link:hover .description,
+    .planet-link:focus-visible .description {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hint {
+      margin-top: 60px;
+      font-family: sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #777e9e;
+    }
+
+    footer {
+      margin-top: 55px;
+      color: #666e8b;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 55px 20px 35px;
+      }
+
+      .planets {
+        gap: 50px;
+      }
+
+      .planet-link {
+        width: 100%;
+      }
+
+      .planet {
+        width: 155px;
+        height: 155px;
+      }
+
+      .planet-icon {
+        font-size: 3.5rem;
+      }
+
+      /* Sur mobile, pas de survol :
+         la description reste visible. */
+
+      .description {
+        opacity: 1;
+        transform: none;
+      }
+
+      .hint {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
   </style>
 </head>
+
 <body>
-  <h1>Welcome on the Platform</h1>
-  <p class="subtitle">Choose an option</p>
-  <div class="grid">
-    <a href="tampon.html" class="tile">
-      <div class="icon">🎯</div>
-      <div class="name">Circular Stamp</div>
-      <div class="desc">Assign a target to each player</div>
-    </a>
-    <a href="coco.html" class="tile">
-      <div class="icon">🃏</div>
-      <div class="name">Blanc Manger Coco</div>
-      <div class="desc">Multiplayer cards game</div>
-    </a>
-  </div>
+  <div class="stars"></div>
+
+  <main class="container">
+    <p class="eyebrow">Le royaume des dieux</p>
+
+    <h1>L'Olympe</h1>
+
+    <p class="subtitle">
+      Bienvenue dans ton univers.<br>
+      Choisis ta destination parmi les astres.
+    </p>
+
+    <div class="divider">✧</div>
+
+    <nav class="planets" aria-label="Choix des outils">
+
+      <a href="tampon.html" class="planet-link">
+        <div class="planet planet-stamp">
+          <span class="planet-icon" aria-hidden="true">🎯</span>
+        </div>
+        <span class="planet-label">Circular Stamp</span>
+        <span class="description">
+          Attribue une cible à chaque joueur
+          et entre dans l'arène des dieux.
+        </span>
+      </a>
+
+      <a href="coco.html" class="planet-link">
+        <div class="planet planet-coco">
+          <span class="planet-icon" aria-hidden="true">🃏</span>
+        </div>
+        <span class="planet-label">Blanc Manger Coco</span>
+        <span class="description">
+          Affronte tes amis dans un jeu de cartes
+          multijoueur plein d'humour.
+        </span>
+      </a>
+
+    </nav>
+
+    <p class="hint">Survole un astre pour en découvrir les secrets</p>
+
+    <footer>
+      AD ASTRA · VERS LES ÉTOILES
+    </footer>
+  </main>
 </body>
 </html>

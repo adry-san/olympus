@@ -211,7 +211,7 @@ async function loadEverything(){
   // 1. Charge les photos depuis Google Drive JSON
   try {
     $('loading-progress').textContent = 'Chargement de la liste des photos...';
-    const res = await fetch(`https://drive.google.com/uc?export=download&id=${JSON_FILE_ID}`);
+    const res = await fetch(`https://drive.google.com/uc?export=view&id=${JSON_FILE_ID}`);
     const data = await res.json();
     allPhotos = data.photos || [];
     $('loading-progress').textContent = `${allPhotos.length} photos trouvées. Chargement des votes...`;

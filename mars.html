@@ -208,18 +208,39 @@ async function loadEverything(){
   showScreen('screen-loading');
   $('main-header').style.display='flex';
 
-  // 1. Charge les photos depuis Google Drive JSON
-  try {
-    $('loading-progress').textContent = 'Chargement de la liste des photos...';
-    const res = await fetch(`https://drive.google.com/uc?export=view&id=${JSON_FILE_ID}`);
-    const data = await res.json();
-    allPhotos = data.photos || [];
-    $('loading-progress').textContent = `${allPhotos.length} photos trouvées. Chargement des votes...`;
-  } catch(e) {
-    alert("Impossible de charger les photos. Vérifie que le fichier JSON est bien partagé publiquement.");
-    showScreen('screen-login');
-    return;
+  // 1. Charge les photos depuis Firestore
+try {
+  $('loading-progress').textContent = 'Chargement de la liste des photos...';
+  
+  // Récupère l'index
+  const indexDoc = await db.collection('camp_config').doc('index').get();
+  if (!indexDoc.exists) throw new Error('Index introuvable');
+  const totalChunks = indexDoc.data().totalChunks;
+  
+  // Charge tous les lots en parallèle
+  const chunkPromises = [];
+  for (let i = 0; i < totalChunks; i++) {
+    chunkPromises.push(db.collection('camp_config').doc(`photos_${i}`).get());
   }
+  const chunks = await Promise.all(chunkPromises);
+  
+  allPhotos = [];
+  chunks.forEach(chunk => {
+    if (!chunk.exists) return;
+    const data = chunk.data();
+    const photoMap = data.photos || {};
+    Object.values(photoMap).forEach(p => {
+      allPhotos.push({ id: p.id, name: p.name, url: p.url, thumb: p.thumb });
+    });
+  });
+  
+  $('loading-progress').textContent = `${allPhotos.length} photos trouvées. Chargement des votes...`;
+} catch(e) {
+  console.error(e);
+  alert("Impossible de charger les photos depuis Firestore : " + e.message);
+  showScreen('screen-login');
+  return;
+}
 
   // 2. Enregistre le votant dans Firebase
   await db.collection('camp_voters').doc(voterId).set({
